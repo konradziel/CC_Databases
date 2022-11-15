@@ -1,0 +1,19 @@
+Zad1
+DELETE FROM postac WHERE wiek = '68';
+DELETE FROM postac WHERE wiek = '64';
+ALTER TABLE przetwory DROP FOREIGN KEY przetwory_ibfk_1;
+ALTER TABLE przetwory DROP FOREIGN KEY przetwory_ibfk_2;
+ALTER TABLE przetwory DROP FOREIGN KEY przetwory_ibfk_1;
+ALTER TABLE walizka DROP FOREIGN KEY walizka_ibfk_1;
+ALTER TABLE postac DROP id_postaci;
+
+Zad2
+ALTER TABLE postac ADD pesel varchar(11) NOT NULL AFTER nazwa;
+UPDATE postac SET pesel = '28449874932' WHERE nazwa = 'Bjorn';
+UPDATE postac SET pesel = '28449874933' WHERE nazwa = 'Drozd'; UPDATE postac SET pesel = '28449874934' WHERE nazwa = 'Tesciowa'; UPDATE postac SET pesel = '28449874935' WHERE nazwa = 'Finn'; UPDATE postac SET pesel = '28449874936' WHERE nazwa = 'Haki'; UPDATE postac SET pesel = '28449874938' WHERE nazwa = 'Ingar';
+ALTER TABLE postac ADD PRIMARY KEY (pesel);
+ALTER TABLE postac MODIFY COLUMN rodzaj ENUM('wiking','ptak','kobieta','syrena');
+INSERT INTO postac (nazwa,pesel, rodzaj, data_ur, wiek) VALUES ('Gertruda Nieszczera','34786430924','syrena','1078-12-01','10');
+
+Zad3
+UPDATE postac SET nazwa_statku = 'Dziki Bez' where nazwa regexp 'a' AND rodzaj = 'wiking';
