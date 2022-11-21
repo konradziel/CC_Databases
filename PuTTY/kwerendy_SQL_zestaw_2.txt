@@ -1,6 +1,5 @@
 Zad1
-DELETE FROM postac WHERE wiek = '68';
-DELETE FROM postac WHERE wiek = '64';
+DELETE FROM postac WHERE rodzaj = 'wiking' AND id_postaci != 1 ORDER BY wiek DESC LIMIT 2;
 ALTER TABLE przetwory DROP FOREIGN KEY przetwory_ibfk_1;
 ALTER TABLE przetwory DROP FOREIGN KEY przetwory_ibfk_2;
 ALTER TABLE przetwory DROP FOREIGN KEY przetwory_ibfk_1;
@@ -17,3 +16,27 @@ INSERT INTO postac (nazwa,pesel, rodzaj, data_ur, wiek) VALUES ('Gertruda Nieszc
 
 Zad3
 UPDATE postac SET nazwa_statku = 'Dziki Bez' where nazwa regexp 'a' AND rodzaj = 'wiking';
+UPDATE statek SET max_ladownosc = max_ladownosc * 0.7 WHERE data_wodowania >= '1901-01-01' AND data_wodowania <= '2000-12-31';
+ALTER TABLE postac ADD CHECK(wiek <= 1000);
+
+Zad4
+ALTER TABLE postac MODIFY COLUMN rodzaj ENUM('wiking','ptak','kobieta','syrena','waz');
+INSERT INTO postac (nazwa,pesel,rodzaj,data_ur,wiek) VALUES('Loko','38472149873','waz', '1082-03-25', '6');
+CREATE TABLE marynarz SELECT*FROM postac WHERE nazwa_statku IS NOT NULL;
+ALTER TABLE marynarz ADD PRIMARY KEY(pesel);
+ALTER TABLE marynarz ADD FOREIGN KEY (nazwa_statku) REFERENCES postac(nazwa_statku) ON UPDATE CASCADE;
+
+
+Zad5
+UPDATE postac SET nazwa_statku = null WHERE nazwa_statku = 'Dziki Bez';
+DELETE FROM postac WHERE nazwa = 'Finn';
+ALTER TABLE narynarz DROP FOREIGN KEY narynarz_ibfk_1;
+DELETE FROM statek;
+ALTER TABLE postac DROP COLUMN nazwa_statku;
+ALTER TABLE marynarz DROP FOREIGN KEY narynarz_ibfk_1;
+ALTER TABLE marynarz DROP COLUMN nazwa_statku;
+DROP TABLE statek;
+CREATE TABLE zwierz (id INT PRIMARY KEY AUTO_INCREMENT,nazwa VARCHAR(40),wiek INT);
+INSERT INTO zwierz(nazwa,wiek) SELECT nazwa, wiek FROM postac WHERE rodzaj='ptak' OR rodzaj='waz';
+
+
