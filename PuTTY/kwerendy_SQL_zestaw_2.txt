@@ -25,6 +25,7 @@ INSERT INTO postac (nazwa,pesel,rodzaj,data_ur,wiek) VALUES('Loko','38472149873'
 CREATE TABLE marynarz SELECT*FROM postac WHERE nazwa_statku IS NOT NULL;
 ALTER TABLE marynarz ADD PRIMARY KEY(pesel);
 ALTER TABLE marynarz ADD FOREIGN KEY (nazwa_statku) REFERENCES postac(nazwa_statku) ON UPDATE CASCADE;
+ALTER TABLE marynarz ADD CHECK(wiek > 0 AND wiek <=100);
 
 
 Zad5
