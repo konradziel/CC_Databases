@@ -31,7 +31,7 @@ ALTER TABLE marynarz ADD CHECK(wiek > 0 AND wiek <=100);
 Zad5
 UPDATE postac SET nazwa_statku = null WHERE nazwa_statku = 'Dziki Bez';
 DELETE FROM postac WHERE nazwa = 'Finn';
-ALTER TABLE narynarz DROP FOREIGN KEY narynarz_ibfk_1;
+ALTER TABLE marynarz DROP FOREIGN KEY narynarz_ibfk_1;
 DELETE FROM statek;
 ALTER TABLE postac DROP COLUMN nazwa_statku;
 ALTER TABLE marynarz DROP FOREIGN KEY narynarz_ibfk_1;
