@@ -1,0 +1,22 @@
+Zad1
+SELECT ROUND(AVG(waga), 2) AS 'srednia waga' FROM kreatura WHERE rodzaj = 'wiking';
+SELECT ROUND(AVG(waga), 2) AS 'srednia waga', rodzaj FROM kreatura GROUP BY rodzaj;
+SELECT ROUND(AVG(1732-YEAR(dataUr)), 0) AS 'sredni wiek', rodzaj FROM kreatura GROUP BY rodzaj;
+Zad2
+SELECT SUM(waga) AS 'suma wag', rodzaj FROM zasob GROUP BY rodzaj;
+SELECT nazwa, ROUND(AVG(waga), 2) AS 'srednia waga' FROM zasob GROUP BY nazwa HAVING SUM(ilosc) >= '4' AND SUM(waga) > 10;
+SELECT COUNT(DISTINCT nazwa) AS 'ilosc unikalnych nazw', rodzaj FROM zasob GROUP BY rodzaj HAVING SUM(ilosc) > '1';
+SELECT rodzaj, count(distinct(nazwa)), ilosc FROM zasob GROUP BY rodzaj HAVING ilosc > 1;
+
+Zad3
+SELECT kreatura.nazwa, ekwipunek.idZasobu AS ekwipunek, zasob.idZasobu, ilosc FROM kreatura LEFT JOIN ekwipunek ON ekwipunek.idKreatury = kreatura.idKreatury JOIN zasob ON zasob.idZasobu = ekwipunek.idZasobu;
+SELECT kreatura.nazwa, SUM(ekwipunek.ilosc) AS calkowita_ilosc FROM kreatura LEFT JOIN ekwipunek ON ekwipunek.idKreatury = kreatura.idKreatury JOIN zasob ON zasob.idZasobu = ekwipunek.idZasobu GROUP BY kreatura.nazwa;
+SELECT kreatura.idKreatury, kreatura.nazwa, ekwipunek.idZasobu FROM kreatura LEFT JOIN ekwipunek ON kreatura.idKreatury = ekwipunek.idKreatury having idZasobu is NULL;
+
+Zad4
+SELECT kreatura.nazwa, YEAR(kreatura.dataUr) AS rokUr, zasob.idZasobu, zasob.nazwa from kreatura CROSS JOIN ekwipunek ON kreatura.idKreatury = ekwipunek.idKreatury JOIN zasob ON zasob.idZasobu = ekwipunek.idZasobu HAVING rokUr > 1670 AND rokUr < 1680;
+SELECT kreatura.nazwa, zasob.idZasobu, zasob.rodzaj FROM kreatura  JOIN ekwipunek ON ekwipunek.idKreatury = kreatura.idKreatury LEFT JOIN zasob ON zasob.idZasobu = ekwipunek.idZasobu HAVING rodzaj='jedzenie' ORDER BY kreatura.dataUr ASC  LIMIT 5;
+SELECT e.nazwa, m.nazwa, e.idKreatury, m.idKreatury FROM kreatura e INNER join kreatura m ON (e.idKreatury - m.idKreatury) = 5;
+
+Zad5
+SELECT kreatura.rodzaj, ROUND(AVG(zasob.waga),2)  FROM kreatura  JOIN ekwipunek ON ekwipunek.idKreatury = kreatura.idKreatury JOIN zasob ON zasob.idZasobu = ekwipunek.idZasobu WHERE (kreatura.rodzaj != 'waz' AND kreatura.rodzaj != 'malpa') GROUP BY kreatura.rodzaj HAVING  SUM(ekwipunek.ilosc) < 30;
