@@ -20,4 +20,4 @@ SELECT w.nazwa, SUM(CHAR_LENGTH(ew.dziennik)) AS suma_znakow FROM wyprawa w INNE
 SELECT w.nazwa, ROUND(SUM(z.waga*e.ilosc)/COUNT(u.id_uczestnika), 2) AS 'srednia_waga_zasobow' FROM wyprawa w INNER JOIN uczestnicy u ON w.id_wyprawy=u.id_wyprawy INNER JOIN kreatura k ON u.id_uczestnika=k.idKreatury INNER JOIN ekwipunek e ON k.idKreatury=e.idKreatury INNER JOIN zasob z ON e.idZasobu=z.idZasobu GROUP BY w.nazwa;
 
 Zad5
-SELECT w.nazwa, k.nazwa, DATEDIFF(w.data_rozpoczecia, k.dataUr) AS 'dni_podczas_rozpoczecia' FROM kreatura k INNER JOIN uczestnicy u ON k.idKreatury=u.id_uczestnika INNER JOIN wyprawa w ON u.id_wyprawy=w.id_wyprawy INNER JOIN etapy_wyprawy ew ON w.id_wyprawy=ew.idWyprawy INNER JOIN sektor s ON ew.sektor=s.id_sektora WHERE s.nazwa = 'Chatka dziadka' GROUP BY k.nazwa;
+SELECT w.nazwa, k.nazwa, DATEDIFF(w.data_rozpoczecia, k.dataUr) AS 'dni_podczas_rozpoczecia' FROM kreatura k INNER JOIN uczestnicy u ON k.idKreatury=u.id_uczestnika INNER JOIN wyprawa w ON u.id_wyprawy=w.id_wyprawy INNER JOIN etapy_wyprawy ew ON w.id_wyprawy=ew.idWyprawy INNER JOIN sektor s ON ew.sektor=s.id_sektora WHERE s.nazwa = 'Chatka dziadka' GROUP BY k.nazwa, w.nazwa;
