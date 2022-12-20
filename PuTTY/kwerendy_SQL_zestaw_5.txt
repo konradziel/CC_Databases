@@ -4,4 +4,20 @@ CREATE TABLE zielinskik.uczestnicy AS (SELECT * FROM wikingowie.uczestnicy);
 CREATE TABLE zielinskik.etapy_wyprawy AS (SELECT * FROM wikingowie.etapy_wyprawy);
 CREATE TABLE zielinskik.sektor AS (SELECT * FROM wikingowie.sektor);
 CREATE TABLE zielinskik.wyprawa AS (SELECT * FROM wikingowie.wyprawa);
+SELECT nazwa FROM kreatura LEFT JOIN uczestnicy on kreatura.idKreatury=uczestnicy.id_uczestnika WHERE uczestnicy.id_uczestnika IS NULL GROUP BY nazwa;
 SELECT wyprawa.nazwa, SUM(ekwipunek.ilosc) FROM wyprawa INNER JOIN uczestnicy ON wyprawa.id_wyprawy=uczestnicy.id_wyprawy INNER JOIN ekwipunek ON ekwipunek.idKreatury=uczestnicy.id_uczestnika GROUP BY wyprawa.nazwa;
+
+Zad2
+SELECT w.nazwa, COUNT(u.id_uczestnika) AS liczba_uczestnikow, GROUP_CONCAT(k.nazwa SEPARATOR ', ') AS nazwy__uczestnikow FROM wyprawa w LEFT JOIN uczestnicy u ON w.id_wyprawy=u.id_wyprawy LEFT JOIN kreatura k ON u.id_uczestnika=k.idKreatury GROUP BY w.nazwa;
+SELECT ew.kolejnosc, s.nazwa, k.nazwa FROM wyprawa w INNER JOIN etapy_wyprawy ew ON wyprawa.id_wyprawy = ew.IdWyprawy INNER JOIN sektor s ON ew.sektor = s.id_sektora INNER JOIN kreatura k ON w.kierownik = k.idKreatury ORDER BY w.data_rozpoczecia DESC, ew.kolejnosc ASC;
+
+Zad3
+SELECT s.nazwa AS nazwa_sektora, COUNT(ew.sektor) AS ilosc_odwiedzin FROM sektor s LEFT JOIN etapy_wyprawy ew ON s.id_sektora = ew.sektor GROUP BY s.id_sektora;
+SELECT k.nazwa, CASE WHEN COUNT(uczestnicy.id_uczestnika) > 0 THEN 'bral udział w wyprawie' ELSE 'nie bral udzialu w wyprawie' END AS udzial FROM kreatura k LEFT JOIN uczestnicy u ON k.idKreatury = u.id_uczestnika GROUP BY k.idKreatury;
+
+Zad4
+SELECT w.nazwa, SUM(LENGTH(ew.dziennik)) AS suma_znakow FROM wyprawa w INNER JOIN etapy_wyprawy ew ON w.id_wyprawy=ew.idWyprawy GROUP BY w.nazwa HAVING suma_znakow < 400;
+SELECT w.nazwa, ROUND(SUM(z.waga*e.ilosc)/COUNT(u.id_uczestnika), 2) AS 'srednia_waga_zasobow' FROM wyprawa w INNER JOIN uczestnicy u ON w.id_wyprawy=u.id_wyprawy INNER JOIN kreatura k ON u.id_uczestnika=k.idKreatury INNER JOIN ekwipunek e ON k.idKreatury=e.idKreatury INNER JOIN zasob z ON e.idZasobu=z.idZasobu GROUP BY w.nazwa;
+
+Zad5
+SELECT w.nazwa, k.nazwa, DATEDIFF(w.data_rozpoczecia, k.dataUr) AS 'dni_podczas_rozpoczecia' FROM kreatura k INNER JOIN uczestnicy u ON k.idKreatury=u.id_uczestnika INNER JOIN wyprawa w ON u.id_wyprawy=w.id_wyprawy INNER JOIN etapy_wyprawy ew ON w.id_wyprawy=ew.idWyprawy INNER JOIN sektor s ON ew.sektor=s.id_sektora WHERE s.nazwa = 'Chatka dziadka' GROUP BY k.nazwa;
