@@ -16,7 +16,7 @@ SELECT s.nazwa AS nazwa_sektora, COUNT(ew.sektor) AS ilosc_odwiedzin FROM sektor
 SELECT k.nazwa, CASE WHEN COUNT(uczestnicy.id_uczestnika) > 0 THEN 'bral udział w wyprawie' ELSE 'nie bral udzialu w wyprawie' END AS udzial FROM kreatura k LEFT JOIN uczestnicy u ON k.idKreatury = u.id_uczestnika GROUP BY k.idKreatury;
 
 Zad4
-SELECT w.nazwa, SUM(LENGTH(ew.dziennik)) AS suma_znakow FROM wyprawa w INNER JOIN etapy_wyprawy ew ON w.id_wyprawy=ew.idWyprawy GROUP BY w.nazwa HAVING suma_znakow < 400;
+SELECT w.nazwa, SUM(CHAR_LENGTH(ew.dziennik)) AS suma_znakow FROM wyprawa w INNER JOIN etapy_wyprawy ew ON w.id_wyprawy=ew.idWyprawy GROUP BY w.nazwa HAVING suma_znakow < 400;
 SELECT w.nazwa, ROUND(SUM(z.waga*e.ilosc)/COUNT(u.id_uczestnika), 2) AS 'srednia_waga_zasobow' FROM wyprawa w INNER JOIN uczestnicy u ON w.id_wyprawy=u.id_wyprawy INNER JOIN kreatura k ON u.id_uczestnika=k.idKreatury INNER JOIN ekwipunek e ON k.idKreatury=e.idKreatury INNER JOIN zasob z ON e.idZasobu=z.idZasobu GROUP BY w.nazwa;
 
 Zad5
