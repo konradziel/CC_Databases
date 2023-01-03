@@ -1,0 +1,31 @@
+Zad1.
+delimiter $$ 
+CREATE TRIGGER kreatura_insert BEFORE INSERT ON kreatura FOR EACH ROW BEGIN IF NEW.waga<=0 THEN SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Waga kreatury nie jest wieksza od zera'; 
+END IF; 
+CREATE TRIGGER kreatura_update BEFORE UPDATE ON kreatura FOR EACH ROW BEGIN IF NEW.waga<=0 THEN SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Waga kreatury nie jest wieksza od zera'; 
+END IF; 
+END$$
+
+Zad2
+delimiter $$
+CREATE TABLE archiwum_wypraw SELECT * FROM wyprawa$$
+ALTER TABLE archiwum_wypraw MODIFY COLUMN kierownik VARCHAR(40)$$
+CREATE TRIGGER wyprawa_delete_trigger AFTER DELETE ON wyprawa FOR EACH ROW BEGIN INSERT INTO archiwum_wypraw (id_wyprawy, nazwa, data_rozpoczecia, data_zakonczenia, kierownik) VALUES (OLD.id_wyprawy, OLD.nazwa, OLD.data_rozpoczecia, OLD.data_zakonczenia, (SELECT nazwa FROM kreatura WHERE kreatura.idKreatury = OLD.kierownik));
+END$$
+
+Zad3
+CREATE PROCEDURE eliksir_silyv3 (IN id INT) BEGIN UPDATE kreatura SET udzwig = udzwig * 1.2 WHERE idKreatury = id; END$$
+
+CREATE FUNCTION zamien_na_wielkie_litery (tekst VARCHAR(255)) RETURNS VARCHAR(255) BEGIN DECLARE wynik VARCHAR(255); SET wynik = UPPER(tekst); RETURN wynik; END$$
+SELECT zamien_na_wielkie_litery('Ala ma kota')$$
+
+Zad4
+CREATE TABLE system_alarmowy ( id_alarmu INTEGER PRIMARY KEY, wiadomosc VARCHAR(255) NOT NULL)$$
+CREATE TRIGGER wyprawa_insert_trigger AFTER INSERT ON wyprawa w FOR EACH ROW 
+BEGIN
+      SELECT w.nazwa FROM wyprawa w INNER JOIN uczestnicy u ON u.id_wyprawy=w.id_wyprawy INNER JOIN kreatura k ON k.idKreatury=w.id_uczestnik INNER JOIN etapy_wyprawy ew ON ew.idWyprawy=w.id_wyprawy INNER JOIN sektor s ON s.id_sektora=ew.idEtapu
+      IF NEW.k.nazwa LIKE '%Teściowa%' AND NEW.s.nazwa LIKE '%domek dziadka%' THEN	  
+      INSERT INTO system_alarmowy (wiadomosc)
+      VALUES ('Teściowa nadchodzi !!!');
+   END IF;
+END;
