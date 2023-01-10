@@ -28,4 +28,37 @@ BEGIN
       INSERT INTO system_alarmowy (wiadomosc)
       VALUES ('Teściowa nadchodzi !!!');
    END IF;
-END;
+END$$
+
+CREATE TRIGGER check_mission_involvement
+BEFORE INSERT ON wyprawa 
+FOR EACH ROW 
+BEGIN 
+IF (IFNULL((SELECT id_uczestnika FROM uczestnicy WHERE id_uczestnika = 14 AND id_wyprawy=new.id_wyprawy LIMIT 1), 0) AND IFNULL((SELECT sektor FROM etapy_wyprawy WHERE idWyprawy=new.id_wyprawy AND sektor=7), 0)) THEN
+INSERT INTO system_alarmowy VALUES (NULL, 'Tesciowa nadchodzi !!!');
+END IF; 
+END$$
+
+
+Zad5
+delimiter $$ 
+1
+CREATE PROCEDURE get_creature_stats (OUT avg_udzwig DECIMAL(10,2), OUT sum_udzwig DECIMAL(10,2), OUT max_udzwig DECIMAL(10,2))
+BEGIN
+    SELECT AVG(udzwig) INTO avg_udzwig FROM kreatura;
+    SELECT SUM(udzwig) INTO sum_udzwig FROM kreatura;
+    SELECT MAX(udzwig) INTO max_udzwig FROM kreatura;
+END$$
+
+jak używać "call get_creature_stats(@coś, @coś1, @coś2)"
+żeby sprawdzić wynik to "SELECT @coś"
+
+
+2
+CREATE PROCEDURE get_mission_sectors (IN id_wyprawy INT)
+BEGIN
+    SELECT CONCAT(wspolrzedna_x, wspolrzedna_y), nazwa FROM sektor s
+    JOIN etapy_wyprawy ew ON s.id_sektora = ew.sektor
+    WHERE ew.idWyprawy = id_wyprawy
+    ORDER BY ew.kolejnosc;
+END$$
